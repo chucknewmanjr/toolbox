@@ -1,0 +1,18 @@
+CREATE OR ALTER PROC #p AS
+	RAISERROR('x1', 16, 1);
+
+	PRINT @@ERROR; -- this happens
+
+	BEGIN TRY;
+		RAISERROR('x2', 16, 1);
+
+		PRINT @@ERROR; -- this doesn't
+	END TRY
+	BEGIN CATCH;
+		PRINT 'catch';
+		PRINT ERROR_MESSAGE();
+		PRINT @@ERROR;
+	END CATCH;
+GO
+
+EXEC #p;
